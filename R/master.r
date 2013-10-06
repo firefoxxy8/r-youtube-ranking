@@ -1,13 +1,17 @@
 # case: http://www.youtube.com/watch?v=xwndLOKQTDs
 
 library(RJSONIO);
+
 library(RCurl);
+
+library(qdap);
+
 youtube.video <- "xwndLOKQTDs";
 youtube.key <- "AIzaSyA8_l-irwC9QoXgymfM_N4WQuXBWCGX9bc";
 
 youtube.url <- paste("https://www.googleapis.com/youtube/v3/videos?id=", youtube.video, "&key=", youtube.key, "&fields=items(id,snippet(channelId,title,categoryId),statistics)&part=snippet,statistics", sep="")
 youtube.json <- getURL(youtube.url);
-youtube.json <- fromJSON(youtube.json);
+youtube.json <- RJSONIO::fromJSON(youtube.json);
   
 stats <- youtube.json$items[[1]]$statistics;
 snippet <- youtube.json$items[[1]]$snippet;
@@ -38,15 +42,21 @@ for (i in 0:(runs-1)) {
                  batch,
                  "&start-index=",
                  start.index, sep="");
-    message(url);
-    data <- fromJSON(getURL(url));
-    mat <- matrix(data$feed$entry);
-    for (i in 1:length(mat)) {
-      entry <- data.frame(comment = mat[i,][[1]]$content[[1]]);
-      rbind(df.comments, entry) -> df.comments
-    }
+    
+    message(paste('trying: ', url));
+    data.url <- getURL(url);
+    tryCatch({
+      data <- RJSONIO::fromJSON(data.url);
+      mat <- matrix(data$feed$entry);
+      for (i in 1:length(mat)) {
+        entry <- data.frame(comment = mat[i,][[1]]$content[[1]]);
+        rbind(df.comments, entry) -> df.comments
+      }
+    }, error = function(e){})
   }
 }
+
+df.comments$polarity <- polarity(df.comments$comment)$all[4][[1]]
 
 #mat <- matrix(bop$feed$entry);
 #df.comments <- NULL;
