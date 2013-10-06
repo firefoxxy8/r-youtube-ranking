@@ -6,7 +6,7 @@ library(RCurl);
 
 library(qdap);
 
-youtube.video <- "xwndLOKQTDs";
+youtube.video <- "lUPMjC9mq5Y";
 youtube.key <- "AIzaSyA8_l-irwC9QoXgymfM_N4WQuXBWCGX9bc";
 
 youtube.url <- paste("https://www.googleapis.com/youtube/v3/videos?id=", youtube.video, "&key=", youtube.key, "&fields=items(id,snippet(channelId,title,categoryId),statistics)&part=snippet,statistics", sep="")
@@ -49,14 +49,16 @@ for (i in 0:(runs-1)) {
       data <- RJSONIO::fromJSON(data.url);
       mat <- matrix(data$feed$entry);
       for (i in 1:length(mat)) {
-        entry <- data.frame(comment = mat[i,][[1]]$content[[1]]);
+        entry <- data.frame(
+          comment = mat[i,][[1]]$content[[1]],
+          polarity = polarity(mat[i,][[1]]$content[[1]])$all[4][[1]]);
         rbind(df.comments, entry) -> df.comments
       }
     }, error = function(e){})
   }
 }
 
-df.comments$polarity <- polarity(df.comments$comment)$all[4][[1]]
+df$youtube.sentiment <- mean(df.comments$polarity)
 
 #mat <- matrix(bop$feed$entry);
 #df.comments <- NULL;
