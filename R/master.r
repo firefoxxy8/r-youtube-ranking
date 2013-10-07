@@ -60,7 +60,9 @@ for (i in 0:(runs-1)) {
         
         rbind(df.comments, entry) -> df.comments
       }
-    }, error = function(e){})
+    }, error = function(e){
+      message(paste(':(', e))
+    })
   }
 }
 
@@ -78,6 +80,9 @@ df$youtube.sentiment <- mean(df.comments$polarity);
 #cred <- readRDS('tcred.RData');
 #cred$handshake();
 #registerTwitterOAuth(cred);
+
+cred <- readRDS('tcred.RData')
+registerTwitterOAuth(cred);
 
 raw.twitter <- searchTwitter(youtube.video, n=1000, lang="da", retryOnRateLimit=4);
 df.raw.twitter <- data.frame(tweet = sapply(raw.twitter, function(x) x$getText()));
