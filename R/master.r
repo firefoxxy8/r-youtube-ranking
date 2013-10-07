@@ -66,8 +66,8 @@ for (i in 0:(runs-1)) {
   }
 }
 
-hist(df.comments$polarity);
-df$youtube.sentiment <- mean(df.comments$polarity);
+hist(df.comments$polarity[df.comments$polarity != 0]);
+df$youtube.sentiment <- mean(df.comments$polarity[df.comments$polarity != 0]);
 
 # Twitter stuff
 
