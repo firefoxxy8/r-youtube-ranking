@@ -7,6 +7,7 @@ library(RCurl);
 library(qdap);
 
 library(twitteR);
+options(RCurlOptions = list(verbose = FALSE, capath = system.file("CurlSSL", "cacert.pem", package = "RCurl"), ssl.verifypeer = FALSE))
 
 youtube.video <- "xwndLOKQTDs";
 youtube.key <- "AIzaSyA8_l-irwC9QoXgymfM_N4WQuXBWCGX9bc";
