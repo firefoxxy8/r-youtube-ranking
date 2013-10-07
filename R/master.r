@@ -6,7 +6,9 @@ library(RCurl);
 
 library(qdap);
 
-youtube.video <- "lUPMjC9mq5Y";
+library(twitteR);
+
+youtube.video <- "xwndLOKQTDs";
 youtube.key <- "AIzaSyA8_l-irwC9QoXgymfM_N4WQuXBWCGX9bc";
 
 youtube.url <- paste("https://www.googleapis.com/youtube/v3/videos?id=", youtube.video, "&key=", youtube.key, "&fields=items(id,snippet(channelId,title,categoryId),statistics)&part=snippet,statistics", sep="")
@@ -60,20 +62,36 @@ for (i in 0:(runs-1)) {
 
 df$youtube.sentiment <- mean(df.comments$polarity)
 
-#mat <- matrix(bop$feed$entry);
-#df.comments <- NULL;
-#for (i in 1:length(mat)) {
-#  entry <- data.frame(comment = mat[i,][[1]]$content[[1]]);
-#  rbind(df.comments, entry) -> df.comments
-#}
+# Twitter stuff
 
-#matrix(bop$feed$entry)[,1])
+#cred <- OAuthFactory$new(consumerKey='hrZLkOR4WD4o1vMoaVjA',
+#                         consumerSecret='Xjfdyfv8N7Cva6KngyQY4mgm8SouqbVCBEiPbePrt80',
+#                         requestURL='https://api.twitter.com/oauth/request_token',
+#                         accessURL='http://api.twitter.com/oauth/access_token',
+#                         authURL='http://api.twitter.com/oauth/authorize');
 
-#test <- data.frame(
-#    "author" = 
-#    )
-#df.comments <- data.frame("comment.id" = "1", 
-#                          "comment.published" = "", 
-#                          "comment.author" = "", 
-#                          "comment.content" = "")
+#cred <- readRDS('tcred.RData');
+#cred$handshake();
+#registerTwitterOAuth(cred);
 
+raw.twitter <- searchTwitter(youtube.video, n=1000, lang="en", retryOnRateLimit=4);
+df.raw.twitter <- data.frame(tweet = sapply(raw.twitter, function(x) x$getText()));
+df.raw.twitter$polarity <- 0;
+for (i in 1:nrow(df.raw.twitter)) {
+  tryCatch({
+    df.raw.twitter[i,]$polarity <- polarity(df.raw.twitter[i,][['tweet']])$all[4][[1]];
+  }, error = function(e){
+    message(':(');
+  })
+}
+
+df$twitter.sentiment <- mean(df.raw.twitter$polarity);
+
+#facebook
+facebook.url <- paste('https://graph.facebook.com/search?q=',
+             youtube.video,
+             '&type=post&access_token=CAACEdEose0cBADCgomZBBqNqu7ktjNWsaZAnwZB7ROq8MVJyh4SUZA9r5xg7FwGHIyma9PbMkubypHxCi4OKv467O8UUhNaBl3WCXrxBdGJ4V8kaIlBXEhxpcfVBTSVR8Yf7PBu59q0UULZAAC3g49Hc9QQ7hTmjQzlTq53DJDK0K4Fen6ycsIGS7Lo6WrZAO2ipgNZCL2ZA8wZDZD',
+             sep = '');
+
+fb <- getURL(facebook.url);
+fb <- fromJSON(fb);
