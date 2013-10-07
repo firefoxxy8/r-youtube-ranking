@@ -53,14 +53,18 @@ for (i in 0:(runs-1)) {
       for (i in 1:length(mat)) {
         entry <- data.frame(
           comment = mat[i,][[1]]$content[[1]],
-          polarity = polarity(mat[i,][[1]]$content[[1]])$all[4][[1]]);
+          polarity = polarity(
+            text.var = mat[i,][[1]]$content[[1]])$all[4][[1]]
+          );
+        
         rbind(df.comments, entry) -> df.comments
       }
     }, error = function(e){})
   }
 }
 
-df$youtube.sentiment <- mean(df.comments$polarity)
+hist(df.comments$polarity);
+df$youtube.sentiment <- mean(df.comments$polarity);
 
 # Twitter stuff
 
@@ -74,7 +78,7 @@ df$youtube.sentiment <- mean(df.comments$polarity)
 #cred$handshake();
 #registerTwitterOAuth(cred);
 
-raw.twitter <- searchTwitter(youtube.video, n=1000, lang="en", retryOnRateLimit=4);
+raw.twitter <- searchTwitter(youtube.video, n=1000, lang="da", retryOnRateLimit=4);
 df.raw.twitter <- data.frame(tweet = sapply(raw.twitter, function(x) x$getText()));
 df.raw.twitter$polarity <- 0;
 for (i in 1:nrow(df.raw.twitter)) {
@@ -88,9 +92,10 @@ for (i in 1:nrow(df.raw.twitter)) {
 df$twitter.sentiment <- mean(df.raw.twitter$polarity);
 
 #facebook
+# CAACEdEose0cBAKjpDrBcySEajRLfsKX2SEyLTUBAQCxlfc9hkNTnKNblcjowBkCjepLMNL85nAo9DfigZCrB3fZCF7lQkeJeHlH7L4j3ZCMiyXAdtOBwlW61wypJqsNWunZCgqcpKu0ZCUbkl2nGCTQ6WSzrGh3fiWxVjZB1pafNAohXNqZChNVK0QYwKSeS6d4RpGbXAHpmAZDZD
 facebook.url <- paste('https://graph.facebook.com/search?q=',
              youtube.video,
-             '&type=post&access_token=CAACEdEose0cBADCgomZBBqNqu7ktjNWsaZAnwZB7ROq8MVJyh4SUZA9r5xg7FwGHIyma9PbMkubypHxCi4OKv467O8UUhNaBl3WCXrxBdGJ4V8kaIlBXEhxpcfVBTSVR8Yf7PBu59q0UULZAAC3g49Hc9QQ7hTmjQzlTq53DJDK0K4Fen6ycsIGS7Lo6WrZAO2ipgNZCL2ZA8wZDZD',
+             '&type=post&access_token=CAACEdEose0cBAKjpDrBcySEajRLfsKX2SEyLTUBAQCxlfc9hkNTnKNblcjowBkCjepLMNL85nAo9DfigZCrB3fZCF7lQkeJeHlH7L4j3ZCMiyXAdtOBwlW61wypJqsNWunZCgqcpKu0ZCUbkl2nGCTQ6WSzrGh3fiWxVjZB1pafNAohXNqZChNVK0QYwKSeS6d4RpGbXAHpmAZDZD',
              sep = '');
 
 fb <- getURL(facebook.url);
