@@ -78,6 +78,16 @@ for(i in videos) {
 # simple model:
 model <- lm(youtube.views ~ youtube.likes + youtube.dislikes + youtube.comments + youtube.sentiment, data = df);
 
+dfscore <- df;
+
+dfscore$score <- log(dfscore$youtube.views +
+                 10 * dfscore$youtube.likes +
+                 -5 * dfscore$youtube.dislikes +
+                 1 * dfscore$youtube.comments +
+                 6 * dfscore$youtube.sentiment)
+
+dfscore$index <- (dfscore$score * 100) / max(dfscore$score)
+
 #### STOP HER
 # comments
 # https://gdata.youtube.com/feeds/api/videos/xwndLOKQTDs/comments?v=2&alt=json&max-results=50
