@@ -67,6 +67,8 @@ getColumnScore <- function(youtube.video) {
   return(df);
 }
 
+
+
 # guiness, heinikein, carlsberg, bud light, budweiser, brahma, coors, corona, Sapporo Beer, Dos Equis, Hahn Super Dry
 videos <- c('xwndLOKQTDs', 'S1ZZreXEqSY', 'vs1wMp84_BA', 'ew9cEATPzDE', 'UDTZCgsZGeA', 'E1l1uXr_8vc', 'BH5izi4n7GE', 'oRdbvGgPPiw', 'K-Rs6YEZAt8', 'L-4zfsy6rsM', 'kL77IvyLF98');
 df <- NULL;
