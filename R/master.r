@@ -82,13 +82,9 @@ model <- lm(youtube.views ~ youtube.likes + youtube.dislikes + youtube.comments 
 
 dfscore <- df;
 
-dfscore$score <- log(dfscore$youtube.views +
-                 10 * dfscore$youtube.likes +
-                 -5 * dfscore$youtube.dislikes +
-                 1 * dfscore$youtube.comments +
-                 6 * dfscore$youtube.sentiment)
+dfscore$score <- log(dfscore$youtube.views + 10 * dfscore$youtube.likes -5 * dfscore$youtube.dislikes + 1 * dfscore$youtube.comments + 6 * dfscore$youtube.sentiment)
 
-dfscore$index <- (dfscore$score * 100) / max(dfscore$score)
+dfscore$index <- (log(dfscore$youtube.views + 10 * dfscore$youtube.likes -5 * dfscore$youtube.dislikes + 1 * dfscore$youtube.comments + 6 * dfscore$youtube.sentiment) * 100) / max(dfscore$score)
 
 #### STOP HER
 # comments
