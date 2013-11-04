@@ -9,10 +9,29 @@ getTwitter <- function(youtube.video) {
   #cred <- readRDS('~/R/r-youtube-ranking/tcred.RData');
   #registerTwitterOAuth(cred);
   
-  youtube.video <- 'lol';
-  raw.twitter <- searchTwitter(youtube.video, n=100, lang='en', since="2011-01-01", until="2012-12-31");
-  df.raw.twitter <- data.frame(tweet = sapply(raw.twitter, function(x) x$getText()));
-  df.raw.twitter$polarity <- 0;
+  youtube.video <- 'nsUEd2cUIqo';
+  raw.twitter <- searchTwitter(youtube.video, n=1500, lang='en');
+  df.raw.twitter <- data.frame(
+    tweet = sapply(raw.twitter, function(x) x$getText()),
+    tweep = sapply(raw.twitter, function(x) x$getScreenName())
+    );
+  df.raw.twitter$tweet.clean <- gsub("[[:punct:]]", "", df.raw.twitter$tweet)
+  df.raw.twitter$tweet.cleaner <- gsub("[^[:alnum:]]", " ", df.raw.twitter$tweet)
+  df.raw.twitter$polarity <- polarity(df.raw.twitter$tweet.cleaner)$all$polarity;
+  
+  df.raw.twitter$tweep.followers <- getUser(df.raw.twitter$tweep)$followersCount;
+  df.raw.twitter$tweep.friends <- getUser(df.raw.twitter$tweep)$friendsCount;
+  
+  # attach user info
+  df.raw.twitter$tweep.followers <- 0;
+  df.raw.twitter$tweep.friends <- 0;
+  for (i in 1:nrow(df.raw.twitter)) {
+    user <- getUser(df.raw.twitter[i,]$tweep);
+    message(user$followersCount);
+    #message(df.raw.twitter[i,]$tweep.followers)
+    df.raw.twitter[i,]$tweep.followers <- user$followersCount;
+    df.raw.twitter[i,]$tweep.friends <- user$friendsCount;
+  }
   
   for (i in 1:nrow(df.raw.twitter)) {
     tryCatch({
