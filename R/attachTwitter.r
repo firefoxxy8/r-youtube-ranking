@@ -1,7 +1,7 @@
 require(RJSONIO);
 require(plyr);
 
-youtube.video <- '0UPckModN14';
+#youtube.video <- '0UPckModN14';
 getTwitterFromLocal <- function(youtube.video) {
   json.file <- paste('~/R/r-youtube-ranking/data/', youtube.video ,'.json', sep='');
   json.data <- RJSONIO::fromJSON(paste(readLines(json.file), collapse=""));
