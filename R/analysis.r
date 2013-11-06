@@ -137,6 +137,8 @@ ext.martin <- merge(ext.data, data.martin, by = 'youtube', all.x = TRUE);
 model <- lm(gross ~ log(t.score) + budget, data = ext.martin);
 
 # model <- lm(gross ~ imdb.rating + meta.score + budget, data = ext.martin);
-
+#summary(lm(imdb.rating ~ meta.score, data=ext.martin))
+c <- ggplot(ext.data, aes(t.score))
+c + geom_bar();
 
 #model <- lm(log(gross) ~ youtube.likes + youtube.views + youtube.dislikes + youtube.comments*youtube.sentiment + log(budget), data = ext.data);
