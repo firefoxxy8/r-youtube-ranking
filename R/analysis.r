@@ -88,7 +88,7 @@ tweet.score <- merge(raw.tweets.unique, quantify.sentiment, by = 'screenName', a
 tweet.score$total <- tweet.score$sentiment * tweet.score$followers * tweet.score$index;
 
 # attach average sentiment to ext.data - works
-save(ext.data, file="~/R/r-youtube-ranking/df/ext.data.Rda");
+#save(ext.data, file="~/R/r-youtube-ranking/df/ext.data.Rda");
 #save(t.all, file="~/R/r-youtube-ranking/df/t.all.Rda");
 for (i in 1:nrow(ext.data)) {
   youtube <- as.character(ext.data[i,]['youtube'][[1]]);
@@ -134,7 +134,9 @@ ggplot(ext.data, aes(x = gross, y = log(t.score))) + geom_point() +
 
 data.martin <- getData()[c('youtube', 'imdb.rating', 'meta.score')];
 ext.martin <- merge(ext.data, data.martin, by = 'youtube', all.x = TRUE);
-model <- lm(gross ~ t.score + meta.score + budget, data = ext.martin);
+model <- lm(gross ~ log(t.score) + budget, data = ext.martin);
+
+# model <- lm(gross ~ imdb.rating + meta.score + budget, data = ext.martin);
 
 
 #model <- lm(log(gross) ~ youtube.likes + youtube.views + youtube.dislikes + youtube.comments*youtube.sentiment + log(budget), data = ext.data);
