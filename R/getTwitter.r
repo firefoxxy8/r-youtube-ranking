@@ -1,16 +1,5 @@
 getTwitter <- function(youtube.video) {
   library(twitteR);
-  #cred <- OAuthFactory$new(consumerKey='hrZLkOR4WD4o1vMoaVjA',
-  #                         consumerSecret='Xjfdyfv8N7Cva6KngyQY4mgm8SouqbVCBEiPbePrt80',
-  #                         requestURL='https://api.twitter.com/oauth/request_token',
-  #                         accessURL='http://api.twitter.com/oauth/access_token',
-  #                         authURL='http://api.twitter.com/oauth/authorize');
-  
-  #cred <- OAuthFactory$new(consumerKey='hrZLkOR4WD4o1vMoaVjA',
-  #                         consumerSecret='Xjfdyfv8N7Cva6KngyQY4mgm8SouqbVCBEiPbePrt80',
-  #                         requestURL='https://api.twitter.com/oauth/request_token',
-  #                         accessURL='http://api.twitter.com/oauth/access_token',
-  #                         authURL='http://api.twitter.com/oauth/authorize');
   
   #cred$handshake();
   #cred <- readRDS('~/R/r-youtube-ranking/tcred.RData');
